@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+FILE *data;
+FILE *data2;
+struct personData{
+    char number[8];
+    char name[100];
+    char adress[100];
+} person;
+void ajoute(){
+    data = fopen("data.txt","a");
+    if(data == NULL){printf("File doesn't exist");};
+    printf("Enter the phone number: "); gets(person.number);
+    printf("Enter the name: "); gets(person.name);
+    printf("Enter the adress: ");gets(person.adress);
+
+    fprintf(data,"%s\t%s\t%s\n",person.number,person.name,person.adress);
+    printf("=============================\n");
+    fclose(data);
+};
+void aficher(){
+    data = fopen("data.txt","r");
+    if(data == NULL){printf("File doesn't exist");return 0;};
+    printf("Number\tName\tAdress\n\n");
+    while(!feof(data)){
+     fscanf(data,"%s\t%s\t%s\n",person.number,person.name,person.adress);
+     printf("%s\t%s\t%s\n",person.number,person.name,person.adress);
+    }
+     fclose(data);
+};
+void edit(){
+    int found = 0;
+    data = fopen("data.txt","r");
+    data2 = fopen("data2.txt","w");
+    if(data == NULL){printf("File doesn't exist");}
+    char userSearch[100];
+    printf("Enter the name you want to edit:");
+    gets(userSearch);
+    while(!feof(data)){
+    fscanf(data,"%s\t%s\t%s\n",person.number,person.name,person.adress);
+    if(strcmp(userSearch,person.name) == 0){
+    found++;
+    printf("Enter the new name: "); gets(person.name);
+    fprintf(data2,"%s\t%s\t%s\n",person.number,person.name,person.adress);
+    }
+    else{
+        fprintf(data2,"%s\t%s\t%s\n",person.number,person.name,person.adress);
+        }
+    }
+    fclose(data);
+    fclose(data2);
+    if(found != 0){
+    // additions
+    data2 = fopen("data2.txt","r");
+    data = fopen("data.txt","w");
+    while(!feof(data2)){
+    fscanf(data2,"%s\t%s\t%s\n",person.number,person.name,person.adress);
+    fprintf(data,"%s\t%s\t%s\n",person.number,person.name,person.adress);
+    }
+    fclose(data);
+    fclose(data2);
+    printf("Done!");
+    }
+    else {
+        printf("Name doesnt exist");
+    }
+
+}
+int main()
+{
+    ajoute();
+    ajoute();
+    ajoute();
+    edit();
+    return 0;
+}
